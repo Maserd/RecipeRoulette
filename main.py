@@ -3,8 +3,54 @@ from tkinter import *
 from tkinter.ttk import *
 
 ''' Opens the text file that the functions will write a https://www.simplyrecipes.com/ to for the microservice'''
-r = open("input.txt", 'r+')
+r = open("input.txt", 'r+', encoding="UTF-8")
 t = open("tester.txt", 'r+')
+
+
+class ToolTip(object):
+    """ Class object for a tkinter tooltip """
+
+    def __init__(self, widget):
+        self.widget = widget
+        self.tipwindow = None
+        self.id = None
+        self.x = self.y = 0
+
+    def showtip(self, text):
+        """Display text in tooltip window"""
+        self.text = text
+        if self.tipwindow or not self.text:
+            return
+        x, y, cx, cy = self.widget.bbox()
+        x = x + self.widget.winfo_rootx() + 150
+        y = y + cy + self.widget.winfo_rooty() + 0
+        self.tipwindow = Toplevel(self.widget)
+        self.tipwindow.wm_overrideredirect(1)
+        self.tipwindow.wm_geometry("+%d+%d" % (x, y))
+        label = Label(self.tipwindow, text=self.text, justify=LEFT,
+                      background="cyan", relief=RAISED, borderwidth=5,
+                      font=("times news roman", "10", "bold"))
+        label.pack()
+
+    def hidetip(self):
+        tw = self.tipwindow
+        self.tipwindow = None
+        if tw:
+            tw.destroy()
+
+
+def CreateToolTip(widget, text):
+    """ Creates a tooltip for a button utilizing the ToolTip task """
+    toolTip = ToolTip(widget)
+
+    def enter(event):
+        toolTip.showtip(text)
+
+    def leave(event):
+        toolTip.hidetip()
+
+    widget.bind('<Enter>', enter)
+    widget.bind('<Leave>', leave)
 
 
 def mainPage():
@@ -20,11 +66,6 @@ def mainPage():
     style.configure('W.TLabel', font=('times news roman', 24, 'bold'),
                     fg='Black')
 
-    ''' Style profile for the buttons '''
-    style = Style()
-    style.configure('W.TButton', font=('times news roman', 12, 'bold'),
-                    fg='Black')
-
     prompt = Label(text="How would you like to filter your result?",
                    style='W.TLabel')
     prompt.grid(row=0, column=0)
@@ -34,6 +75,7 @@ def mainPage():
                   style='W.TButton',
                   command=baseDishWindow)
     opt1.grid(row=3, column=0, pady=10, padx=100)
+    CreateToolTip(opt1, text='Choose what you would like the base of your dish to be (Chicken, pasta, tofu, etc)')
 
     ''' Button 2'''
 
@@ -41,29 +83,36 @@ def mainPage():
                   style='W.TButton',
                   command=regionWindow)
     opt2.grid(row=4, column=0, pady=10, padx=100)
+    CreateToolTip(opt2, text='Choose the continent you would like your dish to originate from')
 
     ''' Button 3'''
 
     opt3 = Button(window, text='Neither',
                   style='W.TButton',
-                  command=randomWindow)
+                  command=randomWindows)
     opt3.grid(row=5, column=0, pady=10, padx=100)
+    CreateToolTip(opt3, text='This option completely randomizes the results')
 
     window.mainloop()
 
 
 def baseDishWindow():
+    """ The layout page for the 'filter by base' option """
     baseDishWindow = Tk()
     baseDishWindow.columnconfigure(0, weight=1, minsize=250)
     baseDishWindow.rowconfigure([0, 8], weight=1, minsize=100)
     baseDishWindow.title('Filter by Base')
     baseDishWindow.geometry('750x750')
 
-
     ''' Style profile for the buttons '''
     style = Style()
-    style.configure('W.TButton', font=('times news roman', 12, 'bold'),
+    style.configure('W.TButton', font=('times news roman', 24, 'bold'),
                     fg='Black')
+
+    ''' Back Button '''
+    back = Button(baseDishWindow, text='Back', command=baseDishWindow.destroy)
+    back.grid(row=0, column=0, pady=10, padx=100)
+    CreateToolTip(back, text='Are you sure you want to terminate this window? The contents will be lost')
 
     ''' Button 1'''
     chx = Button(baseDishWindow, text='Chicken',
@@ -79,7 +128,8 @@ def baseDishWindow():
 
     ''' Button 3'''
     pork = Button(baseDishWindow, text='Pork',
-                  style='W.TButton')
+                  style='W.TButton',
+                  command=porkRecipe)
     pork.grid(row=3, column=0, pady=10, padx=100)
 
     ''' Button 4'''
@@ -108,6 +158,7 @@ def baseDishWindow():
 
 
 def regionWindow():
+    """ The layout page for the 'filter by region' option """
     regionWindow = Tk()
     regionWindow.columnconfigure(0, weight=1, minsize=250)
     regionWindow.rowconfigure([0, 7], weight=1, minsize=100)
@@ -116,8 +167,13 @@ def regionWindow():
 
     ''' Style profile for the buttons '''
     style = Style()
-    style.configure('W.TButton', font=('times news roman', 12, 'bold'),
+    style.configure('W.TButton', font=('times news roman', 24, 'bold'),
                     fg='Black')
+
+    ''' Back Button '''
+    back = Button(regionWindow, text='Back', command=regionWindow.destroy)
+    back.grid(row=0, column=0, pady=10, padx=100)
+    CreateToolTip(back, text='Are you sure you want to terminate this window? The contents will be lost')
 
     ''' Button 1'''
     nAmerica = Button(regionWindow, text='North America',
@@ -156,7 +212,8 @@ def regionWindow():
     australia.grid(row=6, column=0, pady=10, padx=100)
 
 
-def randomWindow():
+def randomWindows():
+    """ This is the window that returns a completely random recipe """
     randomWindow = Tk()
     randomWindow.columnconfigure(0, weight=1, minsize=250)
     randomWindow.rowconfigure(0, weight=1, minsize=100)
@@ -164,6 +221,11 @@ def randomWindow():
     randomWindow.geometry('750x750')
     back = Button(randomWindow, text='Back', command=randomWindow.destroy)
     back.pack()
+    CreateToolTip(back, text='Are you sure you want to terminate this window? The contents will be lost')
+
+    newDish = Button(randomWindow, text='New Dish', command=randomWindows)
+    newDish.pack()
+    CreateToolTip(newDish, text='Provide a new option with the filter you have selected')
 
     recipes = ["smothered-chicken-thighs-in-onion-gravy-recipe-5203984",
                "recipes/slow_cooker_beef_bourguignon/",
@@ -178,11 +240,12 @@ def randomWindow():
                "recipes/venison_sauerbraten/",
                "recipes/grilled_chicken_satay_with_peanut_sauce/",
                "crash-hot-potatoes-with-smoked-salmon-recipe-5211692"]
-    choice = random.randint(0, 12)
+    choice = random.randint(0, len(recipes) - 1)
     try:
-        r = open("input.txt", 'r+')
+        r.seek(0)
+        r.truncate()
         r.write("https://www.simplyrecipes.com/" + recipes[choice])
-        r.close()
+        r.flush()
     except IOError:
         print("File not found.")
     if t.seek(0) is not None:
@@ -191,17 +254,34 @@ def randomWindow():
         write.pack()
 
 
+"""
+The Following are command functions for varies dish bases 
+"""
+
+
 def chickenRecipe():
     recipes = ["smothered-chicken-thighs-in-onion-gravy-recipe-5203984"]
     choice = random.randint(0, 0)
+    win = Tk()
+
+    back = Button(win, text='Back', command=win.destroy)
+    back.pack()
+    CreateToolTip(back, text='Are you sure you want to terminate this window? The contents will be lost')
+
+    newDish = Button(win, text='New Dish', command=chickenRecipe)
+    newDish.pack()
+    CreateToolTip(newDish, text='Provide a new option with the filter you have selected')
+
     try:
-        r = open("input.txt", 'r+')
+
+        r.seek(0)
+        r.truncate()
         r.write("https://www.simplyrecipes.com/" + recipes[choice])
-        r.close()
+        r.flush()
     except IOError:
         print("File not found.")
     if t.seek(0) is not None:
-        write = Label(Tk(),
+        write = Label(win,
                       text=t.read())
         write.pack()
 
@@ -209,10 +289,22 @@ def chickenRecipe():
 def beefRecipe():
     recipes = ["recipes/slow_cooker_beef_bourguignon/"]
     choice = random.randint(0, 0)
+    win = Tk()
 
-    r.write("https://www.simplyrecipes.com/" + recipes[choice])
+    newDish = Button(win, text='New Dish', command=randomWindows)
+    newDish.pack()
+    CreateToolTip(newDish, text='Provide a new option with the filter you have selected')
+
+    try:
+
+        r.seek(0)
+        r.truncate()
+        r.write("https://www.simplyrecipes.com/" + recipes[choice])
+        r.flush()
+    except IOError:
+        print("File not found.")
     if t.seek(0) is not None:
-        write = Label(Tk(),
+        write = Label(win,
                       text=t.read())
         write.pack()
 
@@ -220,14 +312,22 @@ def beefRecipe():
 def porkRecipe():
     recipes = ["/recipes/pressure_cooker_mexican_pulled_pork/"]
     choice = random.randint(0, 0)
+    win = Tk()
+
+    newDish = Button(win, text='New Dish', command=randomWindows)
+    newDish.pack()
+    CreateToolTip(newDish, text='Provide a new option with the filter you have selected')
+
     try:
-        r = open("input.txt", 'r+')
+
+        r.seek(0)
+        r.truncate()
         r.write("https://www.simplyrecipes.com/" + recipes[choice])
-        r.close()
+        r.flush()
     except IOError:
         print("File not found.")
     if t.seek(0) is not None:
-        write = Label(Tk(),
+        write = Label(win,
                       text=t.read())
         write.pack()
 
@@ -235,14 +335,22 @@ def porkRecipe():
 def fishRecipe():
     recipes = ["grilled-whole-fish-stuffed-with-herbs-and-chilies-recipe-5203428"]
     choice = random.randint(0, 0)
+    win = Tk()
+
+    newDish = Button(win, text='New Dish', command=randomWindows)
+    newDish.pack()
+    CreateToolTip(newDish, text='Provide a new option with the filter you have selected')
+
     try:
-        r = open("input.txt", 'r+')
+
+        r.seek(0)
+        r.truncate()
         r.write("https://www.simplyrecipes.com/" + recipes[choice])
-        r.close()
+        r.flush()
     except IOError:
         print("File not found.")
     if t.seek(0) is not None:
-        write = Label(Tk(),
+        write = Label(win,
                       text=t.read())
         write.pack()
 
@@ -250,14 +358,22 @@ def fishRecipe():
 def seafoodRecipe():
     recipes = ["recipes/clam_chowder/"]
     choice = random.randint(0, 0)
+    win = Tk()
+
+    newDish = Button(win, text='New Dish', command=randomWindows)
+    newDish.pack()
+    CreateToolTip(newDish, text='Provide a new option with the filter you have selected')
+
     try:
-        r = open("input.txt", 'r+')
+
+        r.seek(0)
+        r.truncate()
         r.write("https://www.simplyrecipes.com/" + recipes[choice])
-        r.close()
+        r.flush()
     except IOError:
         print("File not found.")
     if t.seek(0) is not None:
-        write = Label(Tk(),
+        write = Label(win,
                       text=t.read())
         write.pack()
 
@@ -265,14 +381,22 @@ def seafoodRecipe():
 def pastaRecipe():
     recipes = ["recipes/pasta_with_butternut_parmesan_sauce/"]
     choice = random.randint(0, 0)
+    win = Tk()
+
+    newDish = Button(win, text='New Dish', command=randomWindows)
+    newDish.pack()
+    CreateToolTip(newDish, text='Provide a new option with the filter you have selected')
+
     try:
-        r = open("input.txt", 'r+')
+
+        r.seek(0)
+        r.truncate()
         r.write("https://www.simplyrecipes.com/" + recipes[choice])
-        r.close()
+        r.flush()
     except IOError:
         print("File not found.")
     if t.seek(0) is not None:
-        write = Label(Tk(),
+        write = Label(win,
                       text=t.read())
         write.pack()
 
@@ -280,29 +404,50 @@ def pastaRecipe():
 def meatSubRecipe():
     recipes = ["spicy-tofu-stir-fry-recipe-5115374"]
     choice = random.randint(0, 0)
+    win = Tk()
+
+    newDish = Button(win, text='New Dish', command=randomWindows)
+    newDish.pack()
+    CreateToolTip(newDish, text='Provide a new option with the filter you have selected')
+
     try:
-        r = open("input.txt", 'r+')
+
+        r.seek(0)
+        r.truncate()
         r.write("https://www.simplyrecipes.com/" + recipes[choice])
-        r.close()
+        r.flush()
     except IOError:
         print("File not found.")
     if t.seek(0) is not None:
-        write = Label(Tk(),
+        write = Label(win,
                       text=t.read())
         write.pack()
+
+
+"""
+The Following are command functions for varies dish regions
+"""
 
 
 def nAmericanRecipe():
     recipes = ["recipes/moroccan_pot_roast/"]
     choice = random.randint(0, 0)
+    win = Tk()
+
+    newDish = Button(win, text='New Dish', command=randomWindows)
+    newDish.pack()
+    CreateToolTip(newDish, text='Provide a new option with the filter you have selected')
+
     try:
-        r = open("input.txt", 'r+')
+
+        r.seek(0)
+        r.truncate()
         r.write("https://www.simplyrecipes.com/" + recipes[choice])
-        r.close()
+        r.flush()
     except IOError:
         print("File not found.")
     if t.seek(0) is not None:
-        write = Label(Tk(),
+        write = Label(win,
                       text=t.read())
         write.pack()
 
@@ -310,14 +455,22 @@ def nAmericanRecipe():
 def sAmericanRecipe():
     recipes = ["recipes/skirt_steak_with_avocado_chimichurri/"]
     choice = random.randint(0, 0)
+    win = Tk()
+
+    newDish = Button(win, text='New Dish', command=randomWindows)
+    newDish.pack()
+    CreateToolTip(newDish, text='Provide a new option with the filter you have selected')
+
     try:
-        r = open("input.txt", 'r+')
+
+        r.seek(0)
+        r.truncate()
         r.write("https://www.simplyrecipes.com/" + recipes[choice])
-        r.close()
+        r.flush()
     except IOError:
         print("File not found.")
     if t.seek(0) is not None:
-        write = Label(Tk(),
+        write = Label(win,
                       text=t.read())
         write.pack()
 
@@ -325,14 +478,22 @@ def sAmericanRecipe():
 def africaRecipe():
     recipes = ["recipes/african_chicken_peanut_stew/"]
     choice = random.randint(0, 0)
+    win = Tk()
+
+    newDish = Button(win, text='New Dish', command=randomWindows)
+    newDish.pack()
+    CreateToolTip(newDish, text='Provide a new option with the filter you have selected')
+
     try:
-        r = open("input.txt", 'r+')
+
+        r.seek(0)
+        r.truncate()
         r.write("https://www.simplyrecipes.com/" + recipes[choice])
-        r.close()
+        r.flush()
     except IOError:
         print("File not found.")
     if t.seek(0) is not None:
-        write = Label(Tk(),
+        write = Label(win,
                       text=t.read())
         write.pack()
 
@@ -340,14 +501,22 @@ def africaRecipe():
 def europeRecipe():
     recipes = ["recipes/venison_sauerbraten/"]
     choice = random.randint(0, 0)
+    win = Tk()
+
+    newDish = Button(win, text='New Dish', command=randomWindows)
+    newDish.pack()
+    CreateToolTip(newDish, text='Provide a new option with the filter you have selected')
+
     try:
-        r = open("input.txt", 'r+')
+
+        r.seek(0)
+        r.truncate()
         r.write("https://www.simplyrecipes.com/" + recipes[choice])
-        r.close()
+        r.flush()
     except IOError:
         print("File not found.")
     if t.seek(0) is not None:
-        write = Label(Tk(),
+        write = Label(win,
                       text=t.read())
         write.pack()
 
@@ -355,14 +524,22 @@ def europeRecipe():
 def asiaRecipe():
     recipes = ["recipes/grilled_chicken_satay_with_peanut_sauce/"]
     choice = random.randint(0, 0)
+    win = Tk()
+
+    newDish = Button(win, text='New Dish', command=randomWindows)
+    newDish.pack()
+    CreateToolTip(newDish, text='Provide a new option with the filter you have selected')
+
     try:
-        r = open("input.txt", 'r+')
+
+        r.seek(0)
+        r.truncate()
         r.write("https://www.simplyrecipes.com/" + recipes[choice])
-        r.close()
+        r.flush()
     except IOError:
         print("File not found.")
     if t.seek(0) is not None:
-        write = Label(Tk(),
+        write = Label(win,
                       text=t.read())
         write.pack()
 
@@ -370,14 +547,22 @@ def asiaRecipe():
 def australiaRecipe():
     recipes = ["crash-hot-potatoes-with-smoked-salmon-recipe-5211692"]
     choice = random.randint(0, 0)
+    win = Tk()
+
+    newDish = Button(win, text='New Dish', command=randomWindows)
+    newDish.pack()
+    CreateToolTip(newDish, text='Provide a new option with the filter you have selected')
+
     try:
-        r = open("input.txt", 'r+')
+
+        r.seek(0)
+        r.truncate()
         r.write("https://www.simplyrecipes.com/" + recipes[choice])
-        r.close()
+        r.flush()
     except IOError:
         print("File not found.")
     if t.seek(0) is not None:
-        write = Label(Tk(),
+        write = Label(win,
                       text=t.read())
         write.pack()
 
