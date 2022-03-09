@@ -1,10 +1,9 @@
 import random
+import time
 from tkinter import *
 from tkinter.ttk import *
 
 ''' Opens the text file that the functions will write a https://www.simplyrecipes.com/ to for the microservice'''
-r = open("input.txt", 'r+', encoding="UTF-8")
-t = open("tester.txt", 'r+')
 
 
 class ToolTip(object):
@@ -241,17 +240,9 @@ def randomWindows():
                "recipes/grilled_chicken_satay_with_peanut_sauce/",
                "crash-hot-potatoes-with-smoked-salmon-recipe-5211692"]
     choice = random.randint(0, len(recipes) - 1)
-    try:
-        r.seek(0)
-        r.truncate()
-        r.write("https://www.simplyrecipes.com/" + recipes[choice])
-        r.flush()
-    except IOError:
-        print("File not found.")
-    if t.seek(0) is not None:
-        write = Label(randomWindow,
-                      text=t.read())
-        write.pack()
+    writeData("https://www.simplyrecipes.com/" + recipes[choice])
+    time.sleep(1)
+    getData(randomWindow)
 
 
 """
@@ -261,7 +252,7 @@ The Following are command functions for varies dish bases
 
 def chickenRecipe():
     recipes = ["smothered-chicken-thighs-in-onion-gravy-recipe-5203984"]
-    choice = random.randint(0, 0)
+    choice = random.randint(0, len(recipes) - 1)
     win = Tk()
 
     back = Button(win, text='Back', command=win.destroy)
@@ -272,156 +263,93 @@ def chickenRecipe():
     newDish.pack()
     CreateToolTip(newDish, text='Provide a new option with the filter you have selected')
 
-    try:
-
-        r.seek(0)
-        r.truncate()
-        r.write("https://www.simplyrecipes.com/" + recipes[choice])
-        r.flush()
-    except IOError:
-        print("File not found.")
-    if t.seek(0) is not None:
-        write = Label(win,
-                      text=t.read())
-        write.pack()
+    writeData("https://www.simplyrecipes.com/" + recipes[choice])
+    time.sleep(1)
+    getData(win)
 
 
 def beefRecipe():
     recipes = ["recipes/slow_cooker_beef_bourguignon/"]
-    choice = random.randint(0, 0)
+    choice = random.randint(0, len(recipes) - 1)
     win = Tk()
 
     newDish = Button(win, text='New Dish', command=randomWindows)
     newDish.pack()
     CreateToolTip(newDish, text='Provide a new option with the filter you have selected')
 
-    try:
-
-        r.seek(0)
-        r.truncate()
-        r.write("https://www.simplyrecipes.com/" + recipes[choice])
-        r.flush()
-    except IOError:
-        print("File not found.")
-    if t.seek(0) is not None:
-        write = Label(win,
-                      text=t.read())
-        write.pack()
+    writeData("https://www.simplyrecipes.com/" + recipes[choice])
+    time.sleep(1)
+    getData(win)
 
 
 def porkRecipe():
     recipes = ["/recipes/pressure_cooker_mexican_pulled_pork/"]
-    choice = random.randint(0, 0)
+    choice = random.randint(0, len(recipes) - 1)
     win = Tk()
 
     newDish = Button(win, text='New Dish', command=randomWindows)
     newDish.pack()
     CreateToolTip(newDish, text='Provide a new option with the filter you have selected')
 
-    try:
-
-        r.seek(0)
-        r.truncate()
-        r.write("https://www.simplyrecipes.com/" + recipes[choice])
-        r.flush()
-    except IOError:
-        print("File not found.")
-    if t.seek(0) is not None:
-        write = Label(win,
-                      text=t.read())
-        write.pack()
+    writeData("https://www.simplyrecipes.com/" + recipes[choice])
+    time.sleep(1)
+    getData(win)
 
 
 def fishRecipe():
     recipes = ["grilled-whole-fish-stuffed-with-herbs-and-chilies-recipe-5203428"]
-    choice = random.randint(0, 0)
+    choice = random.randint(0, len(recipes) - 1)
     win = Tk()
 
     newDish = Button(win, text='New Dish', command=randomWindows)
     newDish.pack()
     CreateToolTip(newDish, text='Provide a new option with the filter you have selected')
 
-    try:
-
-        r.seek(0)
-        r.truncate()
-        r.write("https://www.simplyrecipes.com/" + recipes[choice])
-        r.flush()
-    except IOError:
-        print("File not found.")
-    if t.seek(0) is not None:
-        write = Label(win,
-                      text=t.read())
-        write.pack()
+    writeData("https://www.simplyrecipes.com/" + recipes[choice])
+    time.sleep(1)
+    getData(win)
 
 
 def seafoodRecipe():
     recipes = ["recipes/clam_chowder/"]
-    choice = random.randint(0, 0)
+    choice = random.randint(0, len(recipes) - 1)
     win = Tk()
 
     newDish = Button(win, text='New Dish', command=randomWindows)
     newDish.pack()
     CreateToolTip(newDish, text='Provide a new option with the filter you have selected')
 
-    try:
-
-        r.seek(0)
-        r.truncate()
-        r.write("https://www.simplyrecipes.com/" + recipes[choice])
-        r.flush()
-    except IOError:
-        print("File not found.")
-    if t.seek(0) is not None:
-        write = Label(win,
-                      text=t.read())
-        write.pack()
+    writeData("https://www.simplyrecipes.com/" + recipes[choice])
+    time.sleep(1)
+    getData(win)
 
 
 def pastaRecipe():
     recipes = ["recipes/pasta_with_butternut_parmesan_sauce/"]
-    choice = random.randint(0, 0)
+    choice = random.randint(0, len(recipes) - 1)
     win = Tk()
 
     newDish = Button(win, text='New Dish', command=randomWindows)
     newDish.pack()
     CreateToolTip(newDish, text='Provide a new option with the filter you have selected')
 
-    try:
-
-        r.seek(0)
-        r.truncate()
-        r.write("https://www.simplyrecipes.com/" + recipes[choice])
-        r.flush()
-    except IOError:
-        print("File not found.")
-    if t.seek(0) is not None:
-        write = Label(win,
-                      text=t.read())
-        write.pack()
+    writeData("https://www.simplyrecipes.com/" + recipes[choice])
+    time.sleep(1)
+    getData(win)
 
 
 def meatSubRecipe():
     recipes = ["spicy-tofu-stir-fry-recipe-5115374"]
-    choice = random.randint(0, 0)
+    choice = random.randint(0, len(recipes) - 1)
     win = Tk()
 
     newDish = Button(win, text='New Dish', command=randomWindows)
     newDish.pack()
     CreateToolTip(newDish, text='Provide a new option with the filter you have selected')
 
-    try:
-
-        r.seek(0)
-        r.truncate()
-        r.write("https://www.simplyrecipes.com/" + recipes[choice])
-        r.flush()
-    except IOError:
-        print("File not found.")
-    if t.seek(0) is not None:
-        write = Label(win,
-                      text=t.read())
-        write.pack()
+    writeData("https://www.simplyrecipes.com/" + recipes[choice])
+    time.sleep(1)
+    getData(win)
 
 
 """
@@ -431,140 +359,104 @@ The Following are command functions for varies dish regions
 
 def nAmericanRecipe():
     recipes = ["recipes/moroccan_pot_roast/"]
-    choice = random.randint(0, 0)
+    choice = random.randint(0, len(recipes) - 1)
     win = Tk()
 
     newDish = Button(win, text='New Dish', command=randomWindows)
     newDish.pack()
     CreateToolTip(newDish, text='Provide a new option with the filter you have selected')
 
-    try:
-
-        r.seek(0)
-        r.truncate()
-        r.write("https://www.simplyrecipes.com/" + recipes[choice])
-        r.flush()
-    except IOError:
-        print("File not found.")
-    if t.seek(0) is not None:
-        write = Label(win,
-                      text=t.read())
-        write.pack()
+    writeData("https://www.simplyrecipes.com/" + recipes[choice])
+    time.sleep(1)
+    getData(win)
 
 
 def sAmericanRecipe():
     recipes = ["recipes/skirt_steak_with_avocado_chimichurri/"]
-    choice = random.randint(0, 0)
+    choice = random.randint(0, len(recipes) - 1)
     win = Tk()
 
     newDish = Button(win, text='New Dish', command=randomWindows)
     newDish.pack()
     CreateToolTip(newDish, text='Provide a new option with the filter you have selected')
 
-    try:
-
-        r.seek(0)
-        r.truncate()
-        r.write("https://www.simplyrecipes.com/" + recipes[choice])
-        r.flush()
-    except IOError:
-        print("File not found.")
-    if t.seek(0) is not None:
-        write = Label(win,
-                      text=t.read())
-        write.pack()
+    writeData("https://www.simplyrecipes.com/" + recipes[choice])
+    time.sleep(1)
+    getData(win)
 
 
 def africaRecipe():
     recipes = ["recipes/african_chicken_peanut_stew/"]
-    choice = random.randint(0, 0)
+    choice = random.randint(0, len(recipes) - 1)
     win = Tk()
 
     newDish = Button(win, text='New Dish', command=randomWindows)
     newDish.pack()
     CreateToolTip(newDish, text='Provide a new option with the filter you have selected')
 
-    try:
-
-        r.seek(0)
-        r.truncate()
-        r.write("https://www.simplyrecipes.com/" + recipes[choice])
-        r.flush()
-    except IOError:
-        print("File not found.")
-    if t.seek(0) is not None:
-        write = Label(win,
-                      text=t.read())
-        write.pack()
+    writeData("https://www.simplyrecipes.com/" + recipes[choice])
+    time.sleep(1)
+    getData(win)
 
 
 def europeRecipe():
     recipes = ["recipes/venison_sauerbraten/"]
-    choice = random.randint(0, 0)
+    choice = random.randint(0, len(recipes) - 1)
     win = Tk()
 
     newDish = Button(win, text='New Dish', command=randomWindows)
     newDish.pack()
     CreateToolTip(newDish, text='Provide a new option with the filter you have selected')
 
-    try:
-
-        r.seek(0)
-        r.truncate()
-        r.write("https://www.simplyrecipes.com/" + recipes[choice])
-        r.flush()
-    except IOError:
-        print("File not found.")
-    if t.seek(0) is not None:
-        write = Label(win,
-                      text=t.read())
-        write.pack()
+    writeData("https://www.simplyrecipes.com/" + recipes[choice])
+    time.sleep(1)
+    getData(win)
 
 
 def asiaRecipe():
     recipes = ["recipes/grilled_chicken_satay_with_peanut_sauce/"]
-    choice = random.randint(0, 0)
+    choice = random.randint(0, len(recipes) - 1)
     win = Tk()
 
     newDish = Button(win, text='New Dish', command=randomWindows)
     newDish.pack()
     CreateToolTip(newDish, text='Provide a new option with the filter you have selected')
 
-    try:
-
-        r.seek(0)
-        r.truncate()
-        r.write("https://www.simplyrecipes.com/" + recipes[choice])
-        r.flush()
-    except IOError:
-        print("File not found.")
-    if t.seek(0) is not None:
-        write = Label(win,
-                      text=t.read())
-        write.pack()
+    writeData("https://www.simplyrecipes.com/" + recipes[choice])
+    time.sleep(1)
+    getData(win)
 
 
 def australiaRecipe():
     recipes = ["crash-hot-potatoes-with-smoked-salmon-recipe-5211692"]
-    choice = random.randint(0, 0)
+    choice = random.randint(0, len(recipes) - 1)
     win = Tk()
 
     newDish = Button(win, text='New Dish', command=randomWindows)
     newDish.pack()
     CreateToolTip(newDish, text='Provide a new option with the filter you have selected')
 
-    try:
+    writeData("https://www.simplyrecipes.com/" + recipes[choice])
+    time.sleep(1)
+    getData(win)
 
-        r.seek(0)
-        r.truncate()
-        r.write("https://www.simplyrecipes.com/" + recipes[choice])
-        r.flush()
+
+def writeData(url):
+    r = open("input.txt", 'w')
+    r.write(url)
+    r.close()
+
+
+def getData(win):
+    try:
+        t = open("tester.txt", 'r')
+        if t.seek(0) is not None:
+            write = Label(win, text=t.read())
+            write.pack()
+        t.close()
+
     except IOError:
         print("File not found.")
-    if t.seek(0) is not None:
-        write = Label(win,
-                      text=t.read())
-        write.pack()
 
 
 mainPage()

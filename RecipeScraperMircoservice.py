@@ -30,7 +30,8 @@ while True:
         # Process information. Strip the text of all the unneeded tags. Write to document.
         w = header.text.strip()
         x = ingredients.text.strip()
-        f = open("tester.txt", "w")
+        f = open("tester.txt", "r+")
+
         f.write(w)
         f.write("\n\n")  # Spaces for visual clarity
         f.write(x)
